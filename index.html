@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>45 Years & Forever: Buddy & Belinda</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: #1a0b12; /* Deep romantic dark background */
+            font-family: 'Playfair Display', serif;
+            color: #4a2c38;
+        }
+
+        /* Three.js Canvas Container */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Main Content Wrapper */
+        .container {
+            position: relative;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 2rem;
+            z-index: 10;
+        }
+
+        /* Glassmorphism Card Style */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.5s ease;
+        }
+
+        h1, h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #d6336c;
+            text-align: center;
+        }
+
+        h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
+        h2 { font-size: 2rem; margin-top: 2rem; border-bottom: 2px solid #fcc2d7; padding-bottom: 10px; }
+        p.subtitle { text-align: center; font-style: italic; color: #666; margin-bottom: 2rem; font-size: 1.1rem;}
+
+        /* Form Styling */
+        .question-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #862e53;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 2px solid #d6336c;
+            background: transparent;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+            color: #4a2c38;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-bottom: 2px solid #ff6b6b;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4a2c38;
+        }
+
+        /* Button Styling */
+        button {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 15px;
+            background: linear-gradient(45deg, #d6336c, #ff6b6b);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-family: 'Dancing Script', cursive;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(214, 51, 108, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(214, 51, 108, 0.6);
+        }
+
+        /* Story Output Styling */
+        #story-result {
+            display: none; /* Hidden initially */
+            line-height: 1.8;
+            font-size: 1.2rem;
+        }
+
+        .highlight {
+            color: #d6336c;
+            font-weight: bold;
+            font-style: italic;
+            text-decoration: underline decoration-wavy #fcc2d7;
+        }
+
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 1.5s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Three.js Background -->
+    <div id="canvas-container"></div>
+
+    <div class="container">
+        <!-- INPUT SECTION -->
+        <div id="input-section" class="card">
+            <h1>Buddy & Belinda</h1>
+            <p class="subtitle">45 Years, Countless Memories, and Our Little Dogs</p>
+            <p style="text-align: center; margin-bottom: 30px;">Fill in the blanks to weave the tapestry of your life together.</p>
+
+            <form id="loveForm">
+                
+                <div class="question-group">
+                    <label>Who is writing this story?</label>
+                    <select id="authorName" required>
+                        <option value="Buddy">Buddy (Writing to Belinda)</option>
+                        <option value="Belinda">Belinda (Writing to Buddy)</option>
+                    </select>
+                </div>
+
+                <!-- Part 1: The Beginning -->
+                <h2>The Firsts</h2>
+                <div class="question-group">
+                    <label>Where did you first meet 45+ years ago?</label>
+                    <input type="text" id="placeMet" placeholder="e.g., at a hometown dance" required>
+                </div>
+                <div class="question-group">
+                    <label>What was your first official date?</label>
+                    <input type="text" id="firstDate" placeholder="e.g., getting a bite to eat" required>
+                </div>
+                <div class="question-group">
+                    <label>What is "your song" (or first dance)?</label>
+                    <input type="text" id="song" placeholder="e.g., 'Unchained Melody'" required>
+                </div>
+
+                <!-- Part 2: The Journey (45 Years) -->
+                <h2>45 Years of Us</h2>
+                <div class="question-group">
+                    <label>What is one word to describe your marriage?</label>
+                    <input type="text" id="oneWord" placeholder="e.g., wonderful" required>
+                </div>
+                <div class="question-group">
+                    <label>A funny habit your spouse has:</label>
+                    <input type="text" id="habit" placeholder="e.g., letting the dogs steal the blankets" required>
+                </div>
+                <div class="question-group">
+                    <label>Your favorite shared memory from the last four decades:</label>
+                    <input type="text" id="memory" placeholder="e.g., our first anniversary trip" required>
+                </div>
+                <div class="question-group">
+                    <label>What is your favorite thing to do with your little dogs?</label>
+                    <input type="text" id="dogActivity" placeholder="e.g., relaxing on the porch with them" required>
+                </div>
+
+                <!-- Part 3: 2026 Snapshot -->
+                <h2>Reflecting on 2026</h2>
+                <div class="question-group">
+                    <label>A challenge or big project you tackled together in 2026:</label>
+                    <input type="text" id="challenge2026" placeholder="e.g., fixing up the backyard" required>
+                </div>
+                <div class="question-group">
+                    <label>The most romantic moment of 2026:</label>
+                    <input type="text" id="romantic2026" placeholder="e.g., celebrating our sapphire anniversary" required>
+                </div>
+                <div class="question-group">
+                    <label>Your hope for 2027 and beyond:</label>
+                    <input type="text" id="hope" placeholder="e.g., to spoil the dogs even more" required>
+                </div>
+
+                <button type="submit">Weave Our Story</button>
+            </form>
+        </div>
+
+        <!-- OUTPUT SECTION -->
+        <div id="story-result" class="card">
+            <h1>Forty-Five Years & Counting</h1>
+            <div id="story-content"></div>
+            <button onclick="location.reload()" style="margin-top: 40px;">Write Another Chapter</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        /* ----------------------------------------------------------
+           LOGIC: Mad-Lib Generator
+           ---------------------------------------------------------- */
+        const form = document.getElementById('loveForm');
+        const inputSection = document.getElementById('input-section');
+        const resultSection = document.getElementById('story-result');
+        const storyContent = document.getElementById('story-content');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Gather values
+            const authorName = document.getElementById('authorName').value;
+            const partnerName = authorName === 'Buddy' ? 'Belinda' : 'Buddy';
+
+            const val = {
+                placeMet: document.getElementById('placeMet').value,
+                firstDate: document.getElementById('firstDate').value,
+                song: document.getElementById('song').value,
+                oneWord: document.getElementById('oneWord').value,
+                habit: document.getElementById('habit').value,
+                memory: document.getElementById('memory').value,
+                dogActivity: document.getElementById('dogActivity').value,
+                challenge2026: document.getElementById('challenge2026').value,
+                romantic2026: document.getElementById('romantic2026').value,
+                hope: document.getElementById('hope').value
+            };
+
+            // Construct the story
+            const storyHTML = `
+                <p>
+                    Time is a funny thing. Looking back, it feels like just yesterday that we found each other at <span class="highlight">${val.placeMet}</span>. 
+                    I still remember the butterflies I felt during our first date, <span class="highlight">${val.firstDate}</span>. 
+                    Whenever I hear "<span class="highlight">${val.song}</span>," I am instantly transported back to those early days of discovery.
+                </p>
+                <p>
+                    Now, standing here <strong>45 years later</strong>, I realize that "love" isn't just a feeling; it's a beautiful history we've written together as Mr. and Mrs. Jasper. 
+                    If I had to describe our marriage in a single word, it would be <span class="highlight">${val.oneWord}</span>. 
+                    Sure, life isn't always a movie—sometimes it's just you <span class="highlight">${val.habit}</span> while I shake my head and smile—but I wouldn't trade it for the world. 
+                    Our home, filled with love and the playful energy of our little dogs, is my absolute favorite place on earth. Some of my best days are simply spent <span class="highlight">${val.dogActivity}</span> with you and our furry babies. 
+                    We've built a mountain of memories over these past four-and-a-half decades, like <span class="highlight">${val.memory}</span>, that act as the solid foundation for our future.
+                </p>
+                <p>
+                    <strong>The Year 2026</strong> added its own special milestone to our book. 
+                    We proved our lasting strength when we faced <span class="highlight">${val.challenge2026}</span> side by side, holding hands through it all. 
+                    But 2026 wasn't just about endurance; it was about our enduring love, epitomized by <span class="highlight">${val.romantic2026}</span>.
+                </p>
+                <p>
+                    <span class="highlight">${partnerName}</span>, as we look toward the horizon and our next chapter together, my biggest hope is <span class="highlight">${val.hope}</span>. 
+                    Here is to 45 years of yesterday, our beautiful today, and an infinite tomorrow.
+                </p>
+                <p style="text-align: right; font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-top: 30px;">
+                    Forever yours,<br><span class="highlight" style="text-decoration: none; color: #d6336c;">${authorName}</span>
+                </p>
+            `;
+
+            // Inject and Switch Views
+            storyContent.innerHTML = storyHTML;
+            inputSection.classList.add('hidden');
+            resultSection.style.display = 'block';
+            resultSection.classList.add('fade-in');
+            
+            // Scroll to top
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+
+        /* ----------------------------------------------------------
+           VISUALS: Three.js Heart Particle System
+           ---------------------------------------------------------- */
+        const initThreeJS = () => {
+            const container = document.getElementById('canvas-container');
+            
+            // Scene Setup
+            const scene = new THREE.Scene();
+            // Fog for depth
+            scene.fog = new THREE.FogExp2(0x1a0b12, 0.002);
+
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 50;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Create Heart Shape Texture Programmatically
+            const getHeartTexture = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 32;
+                canvas.height = 32;
+                const context = canvas.getContext('2d');
+                context.fillStyle = "white";
+                context.beginPath();
+                context.moveTo(16, 10);
+                context.bezierCurveTo(16, 8, 14, 0, 8, 0);
+                context.bezierCurveTo(0, 0, 0, 11.5, 0, 11.5);
+                context.bezierCurveTo(0, 21, 16, 30, 16, 30);
+                context.bezierCurveTo(16, 30, 32, 21, 32, 11.5);
+                context.bezierCurveTo(32, 11.5, 32, 0, 24, 0);
+                context.bezierCurveTo(18, 0, 16, 8, 16, 10);
+                context.closePath();
+                context.fill();
+                const texture = new THREE.CanvasTexture(canvas);
+                return texture;
+            }
+
+            // Particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 300; // Number of hearts
+            
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorsArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                // Spread particles
+                posArray[i] = (Math.random() - 0.5) * 100;
+            }
+
+            // Colors: Mix of sapphire/blues (for 45th anniversary) and pinks/golds
+            const color1 = new THREE.Color(0xd6336c); // Pink
+            const color2 = new THREE.Color(0x0f52ba); // Sapphire Blue (45th Anniversary Color)
+            
+            for(let i = 0; i < particlesCount; i++) {
+                const mixedColor = color1.clone().lerp(color2, Math.random());
+                colorsArray[i * 3] = mixedColor.r;
+                colorsArray[i * 3 + 1] = mixedColor.g;
+                colorsArray[i * 3 + 2] = mixedColor.b;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 1.5,
+                map: getHeartTexture(),
+                transparent: true,
+                opacity: 0.8,
+                vertexColors: true,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, material);
+            scene.add(particlesMesh);
+
+            // Mouse Interaction
+            let mouseX = 0;
+            let mouseY = 0;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX - window.innerWidth / 2;
+                mouseY = event.clientY - window.innerHeight / 2;
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                const elapsedTime = clock.getElapsedTime();
+
+                // Rotate entire system slowly
+                particlesMesh.rotation.y = elapsedTime * 0.05;
+                particlesMesh.rotation.x = elapsedTime * 0.02;
+
+                // Gentle wave movement
+                particlesMesh.position.y = Math.sin(elapsedTime) * 2;
+
+                // Mouse parallax
+                camera.position.x += (mouseX * 0.01 - camera.position.x) * 0.05;
+                camera.position.y += (-mouseY * 0.01 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            };
+
+            animate();
+
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        // Start Three.js
+        initThreeJS();
+
+    </script>
+</body>
+</html>
